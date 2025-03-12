@@ -12,22 +12,25 @@
             font-family: Arial, sans-serif;
         }
 
-        body {
-            background: #111;
+        html, body {
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            touch-action: manipulation;
+            width: 100vw;
+            overflow: hidden; /* Mencegah scrolling */
+            touch-action: none; /* Mencegah gerakan tidak sengaja */
         }
 
         #game-container {
             position: relative;
             width: 400px;
             height: 600px;
-            background: #222;
+            background: #111;
             overflow: hidden;
             border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
         }
 
         #player {
@@ -41,6 +44,7 @@
             left: 50%;
             bottom: 20px;
             transform: translateX(-50%);
+            filter: brightness(0.8);
         }
 
         .obstacle {
@@ -51,6 +55,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            filter: brightness(0.7);
         }
 
         #score {
@@ -58,7 +63,7 @@
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            color: white;
+            color: #ccc;
             font-size: 20px;
             font-weight: bold;
         }
@@ -70,7 +75,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
             flex-direction: column;
             justify-content: center;
@@ -92,7 +97,7 @@
             border: none;
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
-            filter: drop-shadow(0px 0px 5px cyan);
+            filter: drop-shadow(0px 0px 5px cyan) brightness(0.8);
         }
 
         #restart-button:hover {
@@ -137,7 +142,7 @@
             const obstacle = document.createElement("div");
             obstacle.classList.add("obstacle");
             obstacle.style.left = "400px";
-            obstacle.style.top = Math.random() > 0.5 ? "60px" : "480px"; // Lebih pas dengan ukuran karakter
+            obstacle.style.top = Math.random() > 0.5 ? "60px" : "480px";
             gameContainer.appendChild(obstacle);
 
             function moveObstacle() {
@@ -181,7 +186,7 @@
         function switchGravity() {
             if (!gameRunning || !playerOnGround) return; 
 
-            jumpSound.play(); // Mainkan suara lompat
+            jumpSound.play();
 
             gravity *= -1;
             player.style.bottom = gravity === 1 ? "20px" : "480px";
@@ -197,7 +202,7 @@
             finalScoreDisplay.innerText = score;
             gameOverScreen.style.display = "flex";
             restartButton.style.display = "block";
-            gameOverSound.play(); // Mainkan suara game over
+            gameOverSound.play();
             clearInterval(obstacleInterval);
             clearInterval(scoreInterval);
         }
@@ -219,6 +224,10 @@
         document.addEventListener("touchstart", () => {
             switchGravity();
         });
+
+        // Mencegah scrolling di perangkat mobile & desktop
+        window.addEventListener("wheel", (e) => e.preventDefault(), { passive: false });
+        window.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false });
 
     </script>
 </body>
